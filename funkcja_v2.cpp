@@ -59,6 +59,11 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q)
         }
     }
 }
+
+void getLineLength(pair<double, double> P, pair<double, double> Q){
+cout<<"Odległość między stacjami wynosi: "<<sqrt((Q.first-P.first)*(Q.first-P.first)+(Q.second-P.second)*(Q.second-P.second))<<endl;
+}
+
 //int main()
 //{
 //   pair<double, double> P = make_pair(23, 84);
