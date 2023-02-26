@@ -43,7 +43,8 @@ int main()
     //printf ("lines %d\n", w.ws_row); // max: 57
     //printf ("columns %d\n", w.ws_col); // max: 236
     */
-    Between("Wrocław", "Kraków");
+    //Between("Wrocław", "Kraków");
+    Between("Radom", "Katowice");
     // Between("Gdańsk", "Zakopane");
     zapytanie = "SELECT `Id_przy`,`Poz_x`,`Poz_y` FROM stacje;";
     query = zapytanie.c_str();
