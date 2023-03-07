@@ -4,7 +4,9 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <algorithm>
 #include <mysql/mysql.h>
+#include <vector>
 #include "funkcja_v2.cpp"
 
 using namespace std;
@@ -34,7 +36,13 @@ void Between(string name_1, string name_2)
     getLineLength(P, Q);
     getLineDirection(P, Q, cords, CheckDirection);
 }
+bool compareByFirst(const std::pair<int, int>& a, const std::pair<int, int>& b) {
+    return a.first < b.first;
+}
 
+bool compareBySecond(const std::pair<int, int>& a, const std::pair<int, int>& b) {
+    return a.second < b.second;
+}
 int main()
 {
     /*
@@ -44,9 +52,9 @@ int main()
     //printf ("columns %d\n", w.ws_col); // max: 236
     */
     //Between("Wrocław", "Kraków");
-    //Between("Radom", "Katowice");
+    Between("Radom", "Katowice");
     //Between("Pruszków", "Brzeg");
-    Between("Gdańsk", "Zakopane");
+    //Between("Gdańsk", "Zakopane");
     zapytanie = "SELECT `Id_przy`,`Poz_x`,`Poz_y` FROM stacje;";
     query = zapytanie.c_str();
     mysql_query(connection, query);
@@ -58,6 +66,7 @@ int main()
         allmap[stoi(row[0])] = value;
     }
     int s = allmap.size();
+    vector<pair<int, int>> PosrednieStacje;
     for (const auto &elem : cords)
     {
         if (CheckDirection == 0)
@@ -72,6 +81,10 @@ int main()
                     // Wypisuje możliwe przystanki
                     //cout << elem.first << ", " << elem.second.first << ", " << elem.second.second << "\n";
                     cout << allmap[i].first << ", " << allmap[i].second << endl;
+                    int cs = allmap[i].first;
+                    int cz = allmap[i].second;
+                    pair<int, int> c = make_pair(cs,cz);
+                    PosrednieStacje.push_back(c);
                 }
             }
         }
@@ -85,7 +98,11 @@ int main()
                 {
                     // Wypisuje możliwe przystanki
                     //cout << elem.first <<", "<< elem.second.first << ", " <<  elem.second.second  <<  "\n";
-                    cout << allmap[i].second  << ", " << allmap[i].first<< endl;                   
+                    cout << allmap[i].second  << ", " << allmap[i].first<< endl;
+                    int cs = allmap[i].second;
+                    int cz = allmap[i].first;
+                    pair<int, int> c = make_pair(cs,cz);
+                    PosrednieStacje.push_back(c);                   
                 }
             }
         }else if(CheckDirection == 2){
@@ -93,7 +110,11 @@ int main()
             for (size_t i = 1; i <= s; i++)
             {
                 if(allmap[i].first == elem.first && allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second){
-                    cout << allmap[i].first  << ", " << allmap[i].second<< endl; 
+                    cout << allmap[i].first  << ", " << allmap[i].second<< endl;
+                    int cs = allmap[i].first;
+                    int cz = allmap[i].second;
+                    pair<int, int> c = make_pair(cs,cz);
+                    PosrednieStacje.push_back(c);
                 }
             }
             
@@ -102,10 +123,25 @@ int main()
             for (size_t i = 1; i <= s; i++)
             {
                 if(allmap[i].first == elem.first && allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second){
-                    cout << allmap[i].first  << ", " << allmap[i].second<< endl; 
+                    cout << allmap[i].first  << ", " << allmap[i].second<< endl;
+                    int cs = allmap[i].first;
+                    int cz = allmap[i].second;
+                    pair<int, int> c = make_pair(cs,cz);
+                    PosrednieStacje.push_back(c);
                 }   
             }
         }
     }
+    cout << endl;
+    sort(PosrednieStacje.begin(), PosrednieStacje.end(), compareByFirst);
+    for (auto p : PosrednieStacje) {
+        cout << "(" << p.first << ", " << p.second << ")" << endl;
+    }
+    cout << endl;
+    sort(PosrednieStacje.begin(), PosrednieStacje.end(), compareBySecond);
+    for (auto p : PosrednieStacje) {
+        cout << "(" << p.first << ", " << p.second << ")" << endl;
+    }
+    
     return 0;
 }
