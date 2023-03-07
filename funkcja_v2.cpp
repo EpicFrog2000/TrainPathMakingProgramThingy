@@ -2,7 +2,7 @@
 #include <map>
 #include <cmath>
 using namespace std;
-
+int const odchylenie = 2;
 enum LineType {
     HORIZONTAL,
     VERTICAL
@@ -35,7 +35,7 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
         cout << "Line is vertical, x = " << x1 << endl;
         double start = min(y1, y2);
         double end = max(y1, y2);
-        pair<int,int> value(start-5,end+5);
+        pair<int,int> value(start-odchylenie,end+odchylenie);
         cords[x1] = value;
         CheckDirection = 3;
     return;
@@ -47,7 +47,7 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
         cout << "Line is horizontal, y = " << y1 << endl;
         double start = min(x1, x2);
         double end = max(x1, x2);
-        pair<int,int> value(start-5,end+5);
+        pair<int,int> value(start-odchylenie,end+odchylenie);
         cords[y1] = value;
         CheckDirection = 3;
     return;
@@ -72,11 +72,11 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
             double y = slope * i + y_intercept;
             if (getLineType(P.first, P.second,Q.first, Q.second)==HORIZONTAL)
             {
-                pair<int,int> value(round(y)-5,round(y)+5);
+                pair<int,int> value(round(y)-odchylenie,round(y)+odchylenie);
                 cords[i] = value;
                 CheckDirection = 1;
             }else{
-                pair<int,int> value(i-5,i+5);
+                pair<int,int> value(i-odchylenie,i+odchylenie);
                 cords[round(y)] = value;
                 CheckDirection = 0;
             }
@@ -92,11 +92,11 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
             double x = (i - y_intercept) / slope;
             if (getLineType(P.first, P.second,Q.first, Q.second)==HORIZONTAL)
             {
-                pair<int,int> value(i-5,i+5);
+                pair<int,int> value(i-odchylenie,i+odchylenie);
                 cords[round(x)] = value;
                 CheckDirection = 1;
             }else{
-                pair<int,int> value(round(x)-5,round(x)+5);
+                pair<int,int> value(round(x)-odchylenie,round(x)+odchylenie);
                 cords[round(i)] = value;
                 CheckDirection = 0;
             }

@@ -8,3 +8,4 @@ DAY_3: Come back from depression(?maybe? nah...)</br>
 DAY_3: Steady progres, having some ideas, going somewhere</br>
 DAY_4: One step forward, one thousand more problems</br>
 DAY_5: Life is pain.</br>
+//TODO: odchylenie od pierwotnej lini czy coś

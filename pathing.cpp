@@ -44,8 +44,8 @@ int main()
     //printf ("columns %d\n", w.ws_col); // max: 236
     */
     //Between("Wrocław", "Kraków");
-    Between("Radom", "Katowice");
-    //Between("Pruszków", "Brzeg");
+    //Between("Radom", "Katowice");
+    Between("Pruszków", "Brzeg");
     //Between("Gdańsk", "Zakopane");
     zapytanie = "SELECT `Id_przy`,`Poz_x`,`Poz_y` FROM stacje;";
     query = zapytanie.c_str();
@@ -107,6 +107,5 @@ int main()
             }
         }
     }
-
     return 0;
 }
