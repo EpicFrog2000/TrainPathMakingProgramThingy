@@ -8,7 +8,7 @@
 #include "funkcja_v2.cpp"
 
 using namespace std;
-bool CheckDirection;
+int CheckDirection;
 map<int, pair<int, int>> cords;
 MYSQL_ROW row;
 MYSQL_RES *res;
@@ -45,7 +45,8 @@ int main()
     */
     //Between("Wrocław", "Kraków");
     Between("Radom", "Katowice");
-    // Between("Gdańsk", "Zakopane");
+    //Between("Pruszków", "Brzeg");
+    //Between("Gdańsk", "Zakopane");
     zapytanie = "SELECT `Id_przy`,`Poz_x`,`Poz_y` FROM stacje;";
     query = zapytanie.c_str();
     mysql_query(connection, query);
@@ -59,35 +60,50 @@ int main()
     int s = allmap.size();
     for (const auto &elem : cords)
     {
-        if (CheckDirection)
+        if (CheckDirection == 0)
         {
             // pierwsze x
             for (size_t i = 1; i <= s; i++)
             {
                 // Wypisuje linie trasy
-                // cout << elem.first << ", " << elem.second.first << ", " << elem.second.second << "\n";
+                //cout << elem.first << ", " << elem.second.first << ", " << elem.second.second << "\n";
                 if (allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second && allmap[i].first == elem.first)
                 {
                     // Wypisuje możliwe przystanki
-                    // cout << elem.first << ", " << elem.second.first << ", " << elem.second.second << "\n";
+                    cout << elem.first << ", " << elem.second.first << ", " << elem.second.second << "\n";
                     cout << allmap[i].first << ", " << allmap[i].second << endl;
                 }
             }
         }
-        else
-        {
+        else if (CheckDirection == 1){
             // pierwsze y
             for (size_t i = 1; i <= s; i++)
             {
                 // Wypisuje linie trasy
-                // cout << elem.first <<", "<< elem.second.first << ", " <<  elem.second.second  <<  "\n";
+                //cout << elem.first <<", "<< elem.second.first << ", " <<  elem.second.second  <<  "\n";
                 if (allmap[i].first >= elem.second.first && allmap[i].first <= elem.second.second && allmap[i].second == elem.first)
                 {
                     // Wypisuje możliwe przystanki
-                    // cout << elem.first <<", "<< elem.second.first << ", " <<  elem.second.second  <<  "\n";
-                    cout << allmap[i].first << ", " << allmap[i].second << endl;
-                    // x, y
+                    cout << elem.first <<", "<< elem.second.first << ", " <<  elem.second.second  <<  "\n";
+                    cout << allmap[i].second  << ", " << allmap[i].first<< endl;                   
                 }
+            }
+        }else if(CheckDirection == 2){
+            //cout << elem.first << ", " << elem.second.first << " -> " << elem.second.second << "\n";
+            for (size_t i = 1; i <= s; i++)
+            {
+                if(allmap[i].first == elem.first && allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second){
+                    cout << allmap[i].first  << ", " << allmap[i].second<< endl; 
+                }
+            }
+            
+        }else if(CheckDirection == 3){
+            //cout << elem.first << ", " << elem.second.first << " -> " << elem.second.second << "\n";
+            for (size_t i = 1; i <= s; i++)
+            {
+                if(allmap[i].first == elem.first && allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second){
+                    cout << allmap[i].first  << ", " << allmap[i].second<< endl; 
+                }   
             }
         }
     }

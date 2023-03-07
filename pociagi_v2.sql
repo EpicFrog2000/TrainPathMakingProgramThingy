@@ -168,7 +168,7 @@ INSERT INTO `stacje` (`Id_przy`, `Nazwa_stacji`, `Poz_x`, `Poz_y`) VALUES
 (109, 'Rybnik', 20, 5),
 (110, 'Tychy', 10, 15),
 (111, 'Kielce', 10, 50),
-(112, 'Ostrowiec Świętokrzyski', 20, 40),
+(112, 'Ostrowiec Świętokrzyski', 20, 41),
 (113, 'Starachowice', 30, 70),
 (114, 'Sandomierz', 60, 30),
 (115, 'Skarżysko-Kamienna', 50, 60),

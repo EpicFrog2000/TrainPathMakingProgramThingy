@@ -17,7 +17,7 @@ LineType getLineType(int x1, int y1, int x2, int y2) {
     }
 }
 
-void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, pair<int,int>> &cords, bool &CheckDirection)
+void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, pair<int,int>> &cords, int &CheckDirection)
 {
     double x1 = P.first, y1 = P.second;
     double x2 = Q.first, y2 = Q.second;
@@ -33,14 +33,24 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
     if (x1 == x2)
     {
         cout << "Line is vertical, x = " << x1 << endl;
-        return;
+        double start = min(y1, y2);
+        double end = max(y1, y2);
+        pair<int,int> value(start-5,end+5);
+        cords[x1] = value;
+        CheckDirection = 3;
+    return;
     }
 
     // Check if line is horizontal
     if (y1 == y2)
     {
         cout << "Line is horizontal, y = " << y1 << endl;
-        return;
+        double start = min(x1, x2);
+        double end = max(x1, x2);
+        pair<int,int> value(start-5,end+5);
+        cords[y1] = value;
+        CheckDirection = 3;
+    return;
     }
 
     // Calculate the slope of the line
@@ -64,11 +74,11 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
             {
                 pair<int,int> value(round(y)-5,round(y)+5);
                 cords[i] = value;
-                CheckDirection = true;
+                CheckDirection = 1;
             }else{
                 pair<int,int> value(i-5,i+5);
                 cords[round(y)] = value;
-                CheckDirection = false;
+                CheckDirection = 0;
             }
         }
     }
@@ -84,11 +94,11 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
             {
                 pair<int,int> value(i-5,i+5);
                 cords[round(x)] = value;
-                CheckDirection = true;
+                CheckDirection = 1;
             }else{
                 pair<int,int> value(round(x)-5,round(x)+5);
                 cords[round(i)] = value;
-                CheckDirection = false;
+                CheckDirection = 0;
             }
         }
     }
