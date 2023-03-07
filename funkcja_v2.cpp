@@ -105,8 +105,9 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
         }
     }
 }
-void getLineLength(pair<double, double> P, pair<double, double> Q){
-cout<<"Odległość między stacjami wynosi: "<<sqrt((Q.first-P.first)*(Q.first-P.first)+(Q.second-P.second)*(Q.second-P.second))<<endl;
+void getLineLength(pair<int, int> P, pair<int, int> Q){
+cout << "dystans od pocz stacji: " << sqrt((Q.first-P.first)*(Q.first-P.first)+(Q.second-P.second)*(Q.second-P.second)) << endl;
+//return sqrt((Q.first-P.first)*(Q.first-P.first)+(Q.second-P.second)*(Q.second-P.second));
 }
 //int main()
 //{

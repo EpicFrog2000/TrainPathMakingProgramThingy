@@ -11,6 +11,7 @@
 
 using namespace std;
 int CheckDirection;
+pair<int, int> e;
 map<int, pair<int, int>> cords;
 MYSQL_ROW row;
 MYSQL_RES *res;
@@ -33,15 +34,9 @@ void Between(string name_1, string name_2)
     pair<double, double> Q = make_pair(stoi(map[name_1].first, nullptr, 10), stoi(map[name_1].second, nullptr, 10));
     pair<double, double> P = make_pair(stoi(map[name_2].first, nullptr, 10), stoi(map[name_2].second, nullptr, 10));
     cout << name_1 << " -> " << name_2 << endl;
+    e = make_pair(stoi(map[name_1].first, nullptr, 10), stoi(map[name_1].second, nullptr, 10));
     getLineLength(P, Q);
     getLineDirection(P, Q, cords, CheckDirection);
-}
-bool compareByFirst(const std::pair<int, int>& a, const std::pair<int, int>& b) {
-    return a.first < b.first;
-}
-
-bool compareBySecond(const std::pair<int, int>& a, const std::pair<int, int>& b) {
-    return a.second < b.second;
 }
 int main()
 {
@@ -53,6 +48,7 @@ int main()
     */
     //Between("Wrocław", "Kraków");
     Between("Radom", "Katowice");
+    //cout << e.first << ", " << e.second << endl;
     //Between("Pruszków", "Brzeg");
     //Between("Gdańsk", "Zakopane");
     zapytanie = "SELECT `Id_przy`,`Poz_x`,`Poz_y` FROM stacje;";
@@ -66,6 +62,7 @@ int main()
         allmap[stoi(row[0])] = value;
     }
     int s = allmap.size();
+
     vector<pair<int, int>> PosrednieStacje;
     for (const auto &elem : cords)
     {
@@ -84,7 +81,7 @@ int main()
                     int cs = allmap[i].first;
                     int cz = allmap[i].second;
                     pair<int, int> c = make_pair(cs,cz);
-                    PosrednieStacje.push_back(c);
+                    getLineLength(e, c);
                 }
             }
         }
@@ -102,7 +99,7 @@ int main()
                     int cs = allmap[i].second;
                     int cz = allmap[i].first;
                     pair<int, int> c = make_pair(cs,cz);
-                    PosrednieStacje.push_back(c);                   
+                    getLineLength(e, c);                  
                 }
             }
         }else if(CheckDirection == 2){
@@ -114,7 +111,7 @@ int main()
                     int cs = allmap[i].first;
                     int cz = allmap[i].second;
                     pair<int, int> c = make_pair(cs,cz);
-                    PosrednieStacje.push_back(c);
+                    getLineLength(e, c);
                 }
             }
             
@@ -127,21 +124,10 @@ int main()
                     int cs = allmap[i].first;
                     int cz = allmap[i].second;
                     pair<int, int> c = make_pair(cs,cz);
-                    PosrednieStacje.push_back(c);
+                    getLineLength(e, c);
                 }   
             }
         }
     }
-    cout << endl;
-    sort(PosrednieStacje.begin(), PosrednieStacje.end(), compareByFirst);
-    for (auto p : PosrednieStacje) {
-        cout << "(" << p.first << ", " << p.second << ")" << endl;
-    }
-    cout << endl;
-    sort(PosrednieStacje.begin(), PosrednieStacje.end(), compareBySecond);
-    for (auto p : PosrednieStacje) {
-        cout << "(" << p.first << ", " << p.second << ")" << endl;
-    }
-    
     return 0;
 }
