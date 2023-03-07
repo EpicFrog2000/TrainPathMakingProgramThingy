@@ -2,7 +2,9 @@
 #include <map>
 #include <cmath>
 using namespace std;
-int const odchylenie = 2;
+
+int const odchylenie = 3;
+
 enum LineType {
     HORIZONTAL,
     VERTICAL

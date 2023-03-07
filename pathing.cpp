@@ -45,8 +45,8 @@ int main()
     */
     //Between("Wrocław", "Kraków");
     //Between("Radom", "Katowice");
-    Between("Pruszków", "Brzeg");
-    //Between("Gdańsk", "Zakopane");
+    //Between("Pruszków", "Brzeg");
+    Between("Gdańsk", "Zakopane");
     zapytanie = "SELECT `Id_przy`,`Poz_x`,`Poz_y` FROM stacje;";
     query = zapytanie.c_str();
     mysql_query(connection, query);
@@ -70,7 +70,7 @@ int main()
                 if (allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second && allmap[i].first == elem.first)
                 {
                     // Wypisuje możliwe przystanki
-                    cout << elem.first << ", " << elem.second.first << ", " << elem.second.second << "\n";
+                    //cout << elem.first << ", " << elem.second.first << ", " << elem.second.second << "\n";
                     cout << allmap[i].first << ", " << allmap[i].second << endl;
                 }
             }
@@ -84,7 +84,7 @@ int main()
                 if (allmap[i].first >= elem.second.first && allmap[i].first <= elem.second.second && allmap[i].second == elem.first)
                 {
                     // Wypisuje możliwe przystanki
-                    cout << elem.first <<", "<< elem.second.first << ", " <<  elem.second.second  <<  "\n";
+                    //cout << elem.first <<", "<< elem.second.first << ", " <<  elem.second.second  <<  "\n";
                     cout << allmap[i].second  << ", " << allmap[i].first<< endl;                   
                 }
             }
