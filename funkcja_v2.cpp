@@ -62,7 +62,7 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
     double y_intercept = y1 - slope * x1;
 
     // Print out the equation of the line in slope-intercept form
-    cout << "Equation of the line: y = " << slope << "x + " << y_intercept << endl;
+    //cout << "Equation of the line: y = " << slope << "x + " << y_intercept << endl;
 
     // Print out all the integer values of x and y between the two points
     if (abs(slope) <= 1)
@@ -109,6 +109,33 @@ void getLineLength(pair<int, int> P, pair<int, int> Q){
 cout << "dystans od pocz stacji: " << sqrt((Q.first-P.first)*(Q.first-P.first)+(Q.second-P.second)*(Q.second-P.second)) << endl;
 //return sqrt((Q.first-P.first)*(Q.first-P.first)+(Q.second-P.second)*(Q.second-P.second));
 }
+void DrawMap(const map<int, pair<int, int>> &mapa) {
+    bool IsThere;
+    for (size_t i = 0; i <10; i++){
+        cout << "__"<<i;
+    }
+    for (size_t i = 10; i <100; i++){
+        cout << "_"<<i;
+    }
+    cout << "_100\n";
+
+    for (size_t i = 0; i <= 100; i++) {
+        cout << "|";
+        for (size_t j = 0; j <= 100; j++) {
+            bool IsThere = false;
+            for (const auto& elem : mapa) {
+                IsThere = elem.second.second == i && elem.second.first == j;
+                if (IsThere) {
+                    break;
+                }
+            }
+            cout << (IsThere ? " S " : "   ");
+        }
+        cout << "|" << i << "\n";
+    }
+    cout << " " << string(303, '-') << "\n";
+}
+
 //int main()
 //{
 //   pair<double, double> P = make_pair(23, 84);
