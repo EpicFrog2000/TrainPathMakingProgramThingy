@@ -27,14 +27,14 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
     // Check if line is a point
     if (x1 == x2 && y1 == y2)
     {
-        cout << "Line is a point: (" << x1 << ", " << y1 << ")" << endl;
+        //cout << "Line is a point: (" << x1 << ", " << y1 << ")" << endl;
         return;
     }
 
     // Check if line is vertical
     if (x1 == x2)
     {
-        cout << "Line is vertical, x = " << x1 << endl;
+        //cout << "Line is vertical, x = " << x1 << endl;
         double start = min(y1, y2);
         double end = max(y1, y2);
         pair<int,int> value(start-odchylenie,end+odchylenie);
@@ -46,7 +46,7 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
     // Check if line is horizontal
     if (y1 == y2)
     {
-        cout << "Line is horizontal, y = " << y1 << endl;
+        //cout << "Line is horizontal, y = " << y1 << endl;
         double start = min(x1, x2);
         double end = max(x1, x2);
         pair<int,int> value(start-odchylenie,end+odchylenie);

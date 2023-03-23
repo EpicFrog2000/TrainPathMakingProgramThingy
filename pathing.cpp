@@ -42,119 +42,114 @@ void Between(string name_1, string name_2)
 }
 int main()
 {
-    /*
-    struct winsize w;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    //printf ("lines %d\n", w.ws_row); // max: 57
-    //printf ("columns %d\n", w.ws_col); // max: 236
-    */
-    Between("Wrocław", "Kraków");
-    //Between("Radom", "Katowice");
-    //cout << e.first << ", " << e.second << endl;
-    //Between("Pruszków", "Brzeg");
-    //Between("Gdańsk", "Zakopane");
-
-    //get all stations
-    zapytanie = "SELECT `Id_przy`,`Poz_x`,`Poz_y` FROM stacje;";
-    query = zapytanie.c_str();
-    mysql_query(connection, query);
-    res = mysql_store_result(connection);
-    map<int, pair<int, int>> allmap;
-    while (row = mysql_fetch_row(res))
-    {
-        pair<int, int> value(stoi(row[1]), stoi(row[2]));
-        allmap[stoi(row[0])] = value;
+/*
+struct winsize w;
+ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+//printf ("lines %d\n", w.ws_row); // max: 57
+//printf ("columns %d\n", w.ws_col); // max: 236
+*/
+//Between("Wrocław", "Kraków");
+//Between("Radom", "Katowice"); // horizontal line
+//Between("Pruszków", "Brzeg"); //vertical line
+Between("Gdańsk", "Zakopane");
+//get all stations
+zapytanie = "SELECT `Id_przy`,`Poz_x`,`Poz_y` FROM stacje;";
+query = zapytanie.c_str();
+mysql_query(connection, query);
+res = mysql_store_result(connection);
+map<int, pair<int, int>> allmap;
+while (row = mysql_fetch_row(res))
+{
+    pair<int, int> value(stoi(row[1]), stoi(row[2]));
+    allmap[stoi(row[0])] = value;
+}
+int s = allmap.size();
+//Get only posrednie stacje
+vector<pair<int, int>> PosrednieStacje;    
+for (const auto &elem : cords)
+{
+    if (CheckDirection == 0){
+        for (size_t i = 1; i <= s; i++)
+        {
+            if (allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second && allmap[i].first == elem.first)
+            {
+                PosrednieStacje.emplace_back(allmap[i].first, allmap[i].second);
+            }
+        }
+    }else if (CheckDirection == 1){
+        for (size_t i = 1; i <= s; i++)
+        {
+            if (allmap[i].first >= elem.second.first && allmap[i].first <= elem.second.second && allmap[i].second == elem.first)
+            {
+                PosrednieStacje.emplace_back(allmap[i].second, allmap[i].first);           
+            }
+        }
+    }else if(CheckDirection == 2){
+        for (size_t i = 1; i <= s; i++)
+        {
+            if(allmap[i].first == elem.first && allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second){
+                PosrednieStacje.emplace_back(allmap[i].first, allmap[i].second);  
+            }
+        }
+    }else if(CheckDirection == 3){
+        for (size_t i = 1; i <= s; i++)
+        {
+            if(allmap[i].first == elem.first && allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second){
+                PosrednieStacje.emplace_back(allmap[i].first, allmap[i].second);  
+            }   
+        }
     }
-    int s = allmap.size();
+}
 
-    //Get only posrednie stacje
-    vector<pair<int, int>> PosrednieStacje;
+vector<pair<int,int>> CordsToDraw;
+vector<pair<int,int>> points;
+points.emplace_back(Q);
+for (const auto &elem : PosrednieStacje)
+{
+    points.emplace_back(elem.first, elem.second);
+}
+points.emplace_back(P);
+pair<int, int> currnet;
+int i = 0;
+cords.clear();
+for (const auto &elem : points)
+{
+    if (i == 0)
+    {
+        i++;
+        currnet = make_pair(elem.first,elem.second);
+        continue;  // skip the first iteration
+    }
+    getLineDirection(currnet, elem, cords, CheckDirection);
     for (const auto &elem : cords)
     {
-        if (CheckDirection == 0)
-        {
-            // pierwsze x
-            for (size_t i = 1; i <= s; i++)
-            {
-                // Wypisuje linie trasy
-                //cout << elem.first << ", " << elem.second.first << ", " << elem.second.second << "\n";
-                if (allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second && allmap[i].first == elem.first)
-                {
-                    // Wypisuje możliwe przystanki
-                    //cout << elem.first << ", " << elem.second.first << ", " << elem.second.second << "\n";
-                    //cout << allmap[i].first << ", " << allmap[i].second << endl;
-                    int cs = allmap[i].first;
-                    int cz = allmap[i].second;
-                    pair<int, int> c = make_pair(cs,cz);
-                    //getLineLength(e, c);
-                    PosrednieStacje.push_back(c);
-                }
-            }
-        }
-        else if (CheckDirection == 1){
-            // pierwsze y
-            for (size_t i = 1; i <= s; i++)
-            {
-                // Wypisuje linie trasy
-                if (allmap[i].first >= elem.second.first && allmap[i].first <= elem.second.second && allmap[i].second == elem.first)
-                {
-                    // Wypisuje możliwe przystanki
-                    //cout << elem.first <<", "<< elem.second.first << ", " <<  elem.second.second  <<  "\n";
-                    //cout << allmap[i].second  << ", " << allmap[i].first<< endl;
-                    int cs = allmap[i].second;
-                    int cz = allmap[i].first;
-                    pair<int, int> c = make_pair(cs,cz);
-                    //getLineLength(e, c);
-                    PosrednieStacje.push_back(c);               
-                }
-            }
-        }else if(CheckDirection == 2){
-            //cout << elem.first << ", " << elem.second.first << " -> " << elem.second.second << "\n";
-            for (size_t i = 1; i <= s; i++)
-            {
-                if(allmap[i].first == elem.first && allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second){
-                    //cout << allmap[i].first  << ", " << allmap[i].second<< endl;
-                    int cs = allmap[i].first;
-                    int cz = allmap[i].second;
-                    pair<int, int> c = make_pair(cs,cz);
-                    //getLineLength(e, c);
-                    PosrednieStacje.push_back(c);  
-                }
-            }
-        }else if(CheckDirection == 3){
-            //cout << elem.first << ", " << elem.second.first << " -> " << elem.second.second << "\n";
-            for (size_t i = 1; i <= s; i++)
-            {
-                if(allmap[i].first == elem.first && allmap[i].second >= elem.second.first && allmap[i].second <= elem.second.second){
-                    //cout << allmap[i].first  << ", " << allmap[i].second<< endl;
-                    int cs = allmap[i].first;
-                    int cz = allmap[i].second;
-                    pair<int, int> c = make_pair(cs,cz);
-                    //getLineLength(e, c);
-                    PosrednieStacje.push_back(c);  
-                }   
-            }
-        }
+        CordsToDraw.emplace_back(elem.first, elem.second.first+3);
     }
+    cords.clear();
+    currnet = elem;
+    i++;
+}
 
-    //print only posrednie stacje
-    for (const auto &elem : PosrednieStacje)
-    {
-        cout << elem.first << ", " << elem.second << "\n";
-    }
-    //allmap - > wszystkie stacje
-    //PosrednieStacje - > posrednie stacje
-    //Q ->  x,y pocz stacji
-    //P - > x,y konc stacji
+CordsToDraw.erase(remove_if(CordsToDraw.begin(), CordsToDraw.end(), [&](pair<int, int> p){
+    return find(PosrednieStacje.begin(), PosrednieStacje.end(), p) != PosrednieStacje.end();
+}), CordsToDraw.end());
 
-    //TODO getLineDirection dla stacji pośrednich
-    vector<pair<int,int>> CordsLines;
-    for (const auto &elem : PosrednieStacje)
-    {
-        cords.clear();
-        getLineDirection(P, Q, cords, CheckDirection);
-    }
+cout << "CordsToDraw after deleting elements present in PosrednieStacje: ";
 
-    DrawMap(allmap); // coords for lines, allmap for all stations, start and end station, stations in between from above
-    return 0;
+//for (const auto &elem : CordsToDraw)
+//{
+//   cout << elem.first << ", "<< elem.second<<"\n";
+//}
+
+//TODO wszystkiestacje -= points
+
+
+
+//allmap - > wszystkie stacje
+//PosrednieStacje - > posrednie stacje
+//Q ->  x,y pocz stacji
+//P - > x,y konc stacji
+//CordsToDraw -> tory kolejowe
+DrawMap(allmap);
+return 0;
 }
