@@ -51,7 +51,8 @@ ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 //Between("Wrocław", "Kraków");
 //Between("Radom", "Katowice"); // horizontal line
 //Between("Pruszków", "Brzeg"); //vertical line
-Between("Gdańsk", "Zakopane");
+//Between("Gdańsk", "Zakopane");
+Between("Suwałki", "Gryfice");
 //get all stations
 zapytanie = "SELECT `Id_przy`,`Poz_x`,`Poz_y` FROM stacje;";
 query = zapytanie.c_str();
@@ -64,6 +65,7 @@ while (row = mysql_fetch_row(res))
     allmap[stoi(row[0])] = value;
 }
 int s = allmap.size();
+
 //Get only posrednie stacje
 vector<pair<int, int>> PosrednieStacje;    
 for (const auto &elem : cords)
@@ -102,54 +104,48 @@ for (const auto &elem : cords)
 }
 
 vector<pair<int,int>> CordsToDraw;
-vector<pair<int,int>> points;
+vector<pair<int,int>> points; //wszystkie stacje trasy
 points.emplace_back(Q);
 for (const auto &elem : PosrednieStacje)
 {
     points.emplace_back(elem.first, elem.second);
 }
 points.emplace_back(P);
-pair<int, int> currnet;
-int i = 0;
+
 cords.clear();
+
+
 for (const auto &elem : points)
 {
-    if (i == 0)
-    {
-        i++;
-        currnet = make_pair(elem.first,elem.second);
-        continue;  // skip the first iteration
-    }
-    getLineDirection(currnet, elem, cords, CheckDirection);
-    for (const auto &elem : cords)
-    {
-        CordsToDraw.emplace_back(elem.first, elem.second.first+3);
+cout << elem.first << ", " << elem.second << endl;
+}
+cout << "\n";
+
+pair<int, int> current;
+bool FirstIteration = true;
+for (const auto &elem : points){
+    if (FirstIteration){current = make_pair(elem.first,elem.second);FirstIteration = false;continue;}
+    //cout << current.first << ", " << current.second << " -> current station" <<endl;
+    getLineDirection(current, elem, cords, CheckDirection);
+    for (const auto &eleme : cords){
+        if (CheckDirection == 1)
+        {
+            //cout << eleme.first<<", "<< ((eleme.second.first)+3) << endl;
+            CordsToDraw.emplace_back(eleme.first, eleme.second.first+ODCHYLENIE);
+        }else{
+            //cout << ((eleme.second.first)+3)<<", "<< eleme.first << endl;
+            CordsToDraw.emplace_back( eleme.second.first+ODCHYLENIE, eleme.first);
+        }
     }
     cords.clear();
-    currnet = elem;
-    i++;
+    current = elem;
+    //cout << current.first << ", " << current.second << " -> next station" <<endl;
 }
-
-CordsToDraw.erase(remove_if(CordsToDraw.begin(), CordsToDraw.end(), [&](pair<int, int> p){
-    return find(PosrednieStacje.begin(), PosrednieStacje.end(), p) != PosrednieStacje.end();
-}), CordsToDraw.end());
-
-cout << "CordsToDraw after deleting elements present in PosrednieStacje: ";
-
-//for (const auto &elem : CordsToDraw)
-//{
-//   cout << elem.first << ", "<< elem.second<<"\n";
-//}
-
-//TODO wszystkiestacje -= points
-
-
-
 //allmap - > wszystkie stacje
 //PosrednieStacje - > posrednie stacje
 //Q ->  x,y pocz stacji
 //P - > x,y konc stacji
 //CordsToDraw -> tory kolejowe
-DrawMap(allmap);
+DrawMap(allmap, Q, P, PosrednieStacje, CordsToDraw);
 return 0;
 }

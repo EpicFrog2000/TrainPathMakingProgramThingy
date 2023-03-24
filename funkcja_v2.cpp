@@ -1,9 +1,10 @@
 #include <iostream>
 #include <map>
 #include <cmath>
+#include <vector>
 using namespace std;
 
-int const odchylenie = 3;
+int const ODCHYLENIE =3;
 
 enum LineType {
     HORIZONTAL,
@@ -37,7 +38,7 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
         //cout << "Line is vertical, x = " << x1 << endl;
         double start = min(y1, y2);
         double end = max(y1, y2);
-        pair<int,int> value(start-odchylenie,end+odchylenie);
+        pair<int,int> value(start-ODCHYLENIE,end+ODCHYLENIE);
         cords[x1] = value;
         CheckDirection = 3;
     return;
@@ -49,7 +50,7 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
         //cout << "Line is horizontal, y = " << y1 << endl;
         double start = min(x1, x2);
         double end = max(x1, x2);
-        pair<int,int> value(start-odchylenie,end+odchylenie);
+        pair<int,int> value(start-ODCHYLENIE,end+ODCHYLENIE);
         cords[y1] = value;
         CheckDirection = 3;
     return;
@@ -74,11 +75,11 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
             double y = slope * i + y_intercept;
             if (getLineType(P.first, P.second,Q.first, Q.second)==HORIZONTAL)
             {
-                pair<int,int> value(round(y)-odchylenie,round(y)+odchylenie);
+                pair<int,int> value(round(y)-ODCHYLENIE,round(y)+ODCHYLENIE);
                 cords[i] = value;
                 CheckDirection = 1;
             }else{
-                pair<int,int> value(i-odchylenie,i+odchylenie);
+                pair<int,int> value(i-ODCHYLENIE,i+ODCHYLENIE);
                 cords[round(y)] = value;
                 CheckDirection = 0;
             }
@@ -94,11 +95,11 @@ void getLineDirection(pair<double, double> P, pair<double, double> Q, map<int, p
             double x = (i - y_intercept) / slope;
             if (getLineType(P.first, P.second,Q.first, Q.second)==HORIZONTAL)
             {
-                pair<int,int> value(i-odchylenie,i+odchylenie);
+                pair<int,int> value(i-ODCHYLENIE,i+ODCHYLENIE);
                 cords[round(x)] = value;
                 CheckDirection = 1;
             }else{
-                pair<int,int> value(round(x)-odchylenie,round(x)+odchylenie);
+                pair<int,int> value(round(x)-ODCHYLENIE,round(x)+ODCHYLENIE);
                 cords[round(i)] = value;
                 CheckDirection = 0;
             }
@@ -109,8 +110,8 @@ void getLineLength(pair<int, int> P, pair<int, int> Q){
 cout << "dystans od pocz stacji: " << sqrt((Q.first-P.first)*(Q.first-P.first)+(Q.second-P.second)*(Q.second-P.second)) << endl;
 //return sqrt((Q.first-P.first)*(Q.first-P.first)+(Q.second-P.second)*(Q.second-P.second));
 }
-void DrawMap(const map<int, pair<int, int>> &mapa) {
-    bool IsThere;
+void DrawMap(const map<int, pair<int, int>> &mapa, const pair<double, double> Q, const pair<double, double> P, vector<pair<int, int>> PosrednieStacje, vector<pair<int,int>> CordsToDraw) {
+    int IsThere; //0-puste, 1-Stacjazwykła, 2-stacjaTrasy, 3-stacjaKON, 4-stacjaPOCZ, 5-Trasa
     for (size_t i = 0; i <10; i++){
         cout << "__"<<i;
     }
@@ -122,14 +123,47 @@ void DrawMap(const map<int, pair<int, int>> &mapa) {
     for (size_t i = 0; i <= 100; i++) {
         cout << "|";
         for (size_t j = 0; j <= 100; j++) {
-            bool IsThere = false;
-            for (const auto& elem : mapa) {
-                IsThere = elem.second.second == i && elem.second.first == j;
-                if (IsThere) {
-                    break;
+            IsThere = 0;
+            for (const auto &elem : mapa)
+            {
+                if (elem.second.first == j && elem.second.second == i)
+                {
+                    IsThere = 1;
                 }
             }
-            cout << (IsThere ? " S " : "   ");
+            for (const auto &elem : CordsToDraw)
+            {
+                if (elem.first == j && elem.second == i)
+                {
+                    IsThere = 5;
+                }
+            }
+            for (const auto &elem : PosrednieStacje)
+            {
+                if (elem.first == j && elem.second == i)
+                {
+                    IsThere = 2;
+                }
+            }
+            if (Q.first == j && Q.second == i)
+            {
+                IsThere = 4;
+            }else if(P.first == j && P.second == i){
+                IsThere = 3;
+            }
+            if(IsThere==1){
+                cout << " S ";
+            }else if (IsThere == 4){
+                cout << "POC";
+            }else if (IsThere == 5){
+                cout << " # ";
+            }else if (IsThere == 3){
+                cout << "KON";
+            }else if (IsThere == 2){
+                cout << "_S_";
+            }else{
+                cout << "   ";
+            }
         }
         cout << "|" << i << "\n";
     }

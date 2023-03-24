@@ -8,6 +8,7 @@ DAY_3: Come back from depression(?maybe? nah...)</br>
 DAY_3: Steady progres, having some ideas, going somewhere</br>
 DAY_4: One step forward, one thousand more problems</br>
 DAY_5: Life is pain.</br>
-//TODO: wźąć, zebrać i sortnąć pśrednie stacje i format czy coś
-//TODO: rysowanie trasy w terminalu czy cos
-//WIP: cordy lini między stacjami posrednimi
+DAY_6: END IS NEAR. </br>
+DAY_7: NOTHING WORKS AS PLANED FUCK </br>
+DAY_8: Sometimes kinda works </br>
+//TODO FIX EVERYTHING
